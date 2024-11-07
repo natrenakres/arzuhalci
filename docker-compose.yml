@@ -1,0 +1,23 @@
+version: '3.4'
+
+services: 
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    environment:
+      - POSTGRES_DB=arzuhalci-db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - ./.containers/db:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+  ollama:
+    image: ollama/ollama
+    container_name: ollama
+    command:
+      - ollama run llama3.2:1b
+    volumes:
+      - ./.containers/ollama:/root/.ollama
+    ports:
+      - 11434:11434
