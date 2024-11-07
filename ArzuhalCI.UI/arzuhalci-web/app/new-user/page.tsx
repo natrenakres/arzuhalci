@@ -1,0 +1,1 @@
+export { NewUserScreen as default } from "@/src/screens/new-user"

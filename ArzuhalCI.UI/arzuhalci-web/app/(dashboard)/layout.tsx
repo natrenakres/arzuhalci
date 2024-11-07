@@ -1,0 +1,1 @@
+export { dashboardMetadata as metadata, DashboardLayout as default } from "@/src/app/layouts";
