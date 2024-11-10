@@ -69,10 +69,6 @@ namespace ArzuhalCI.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<Guid>("CustomerId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("customer_id");
-
                     b.Property<Guid>("EntryId")
                         .HasColumnType("uuid")
                         .HasColumnName("entry_id");
@@ -105,11 +101,17 @@ namespace ArzuhalCI.Infrastructure.Migrations
                                 .HasColumnName("summary");
                         });
 
+                    b.ComplexProperty<Dictionary<string, object>>("Petition", "ArzuhalCI.Domain.Entries.Analyse.Petition#Petition", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<string>("Text")
+                                .HasColumnType("text")
+                                .HasColumnName("petition");
+                        });
+
                     b.HasKey("Id")
                         .HasName("pk_analyses");
-
-                    b.HasIndex("CustomerId")
-                        .HasDatabaseName("ix_analyses_customer_id");
 
                     b.HasIndex("EntryId")
                         .IsUnique()
@@ -137,6 +139,15 @@ namespace ArzuhalCI.Infrastructure.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("status");
 
+                    b.ComplexProperty<Dictionary<string, object>>("Output", "ArzuhalCI.Domain.Entries.Entry.Output#Output", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<string>("Text")
+                                .HasColumnType("text")
+                                .HasColumnName("output");
+                        });
+
                     b.ComplexProperty<Dictionary<string, object>>("Prompt", "ArzuhalCI.Domain.Entries.Entry.Prompt#Prompt", b1 =>
                         {
                             b1.IsRequired();
@@ -156,53 +167,14 @@ namespace ArzuhalCI.Infrastructure.Migrations
                     b.ToTable("entries", "public");
                 });
 
-            modelBuilder.Entity("ArzuhalCI.Domain.Petitions.Petition", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.Property<Guid>("EntryId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("entry_id");
-
-                    b.ComplexProperty<Dictionary<string, object>>("Content", "ArzuhalCI.Domain.Petitions.Petition.Content#Content", b1 =>
-                        {
-                            b1.IsRequired();
-
-                            b1.Property<string>("Text")
-                                .IsRequired()
-                                .HasColumnType("text")
-                                .HasColumnName("content");
-                        });
-
-                    b.HasKey("Id")
-                        .HasName("pk_petitions");
-
-                    b.HasIndex("EntryId")
-                        .HasDatabaseName("ix_petitions_entry_id");
-
-                    b.ToTable("petitions", "public");
-                });
-
             modelBuilder.Entity("ArzuhalCI.Domain.Entries.Analyse", b =>
                 {
-                    b.HasOne("ArzuhalCI.Domain.Customers.Customer", "Customer")
-                        .WithMany()
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_analyses_customers_customer_id");
-
                     b.HasOne("ArzuhalCI.Domain.Entries.Entry", "Entry")
                         .WithOne("Analyse")
                         .HasForeignKey("ArzuhalCI.Domain.Entries.Analyse", "EntryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_analyses_entries_entry_id");
-
-                    b.Navigation("Customer");
 
                     b.Navigation("Entry");
                 });
@@ -217,18 +189,6 @@ namespace ArzuhalCI.Infrastructure.Migrations
                         .HasConstraintName("fk_entries_customers_customer_id");
 
                     b.Navigation("Customer");
-                });
-
-            modelBuilder.Entity("ArzuhalCI.Domain.Petitions.Petition", b =>
-                {
-                    b.HasOne("ArzuhalCI.Domain.Entries.Entry", "Entry")
-                        .WithMany()
-                        .HasForeignKey("EntryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_petitions_entries_entry_id");
-
-                    b.Navigation("Entry");
                 });
 
             modelBuilder.Entity("ArzuhalCI.Domain.Customers.Customer", b =>

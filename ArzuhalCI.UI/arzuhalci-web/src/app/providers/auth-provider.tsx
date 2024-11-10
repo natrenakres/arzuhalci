@@ -1,12 +1,12 @@
-import { ClerkProvider } from "@clerk/nextjs";
 import { ReactNode } from "react";
+import { UserProvider } from "@auth0/nextjs-auth0/client";
 
 export function AuthProvider({ children } : { children: ReactNode }) {
     
 
     return (
-        <ClerkProvider>
+        <UserProvider>
             { children }
-        </ClerkProvider>
+        </UserProvider>
     )
 }

@@ -19,5 +19,11 @@ public class AnalyseConfiguration : IEntityTypeConfiguration<Analyse>
                 propertyBuilder.Property(x => x.Summary).HasColumnName("summary");
                 propertyBuilder.Property(x => x.SentimentScore).HasColumnName("sentiment_score");
             });
+
+        builder.ComplexProperty(a => a.Petition,
+            complexPropertyBuilder => complexPropertyBuilder.Property(p => p.Text)
+                .HasColumnName("petition")
+                .IsRequired(false)
+            );
     }
 }

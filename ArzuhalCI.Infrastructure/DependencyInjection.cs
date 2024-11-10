@@ -1,16 +1,21 @@
+using ArzuhalCI.Application.Abstractions.Ai;
+using ArzuhalCI.Application.Abstractions.Authentication;
 using ArzuhalCI.Application.Abstractions.Data;
 using ArzuhalCI.Domain.Customers;
 using ArzuhalCI.Domain.Entries;
+using ArzuhalCI.Infrastructure.AI;
+using ArzuhalCI.Infrastructure.Authentication;
 using ArzuhalCI.Infrastructure.Database;
 using ArzuhalCI.Infrastructure.Repositories;
 using ArzuhalCI.Infrastructure.Time;
 using ArzuhalCI.SharedKernel;
 using Dapper;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.Extensions.AI;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Npgsql;
 
 namespace ArzuhalCI.Infrastructure;
@@ -19,7 +24,7 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         => services
-            .AddServices()
+            .AddServices(configuration)
             .AddDatabase(configuration)
             .AddHealthChecks(configuration);
 
@@ -51,9 +56,21 @@ public static class DependencyInjection
     
     
 
-    private static IServiceCollection AddServices(this IServiceCollection services)
+    private static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
+        services.AddTransient<IUserContext, UserContext>();
+        services.AddTransient<IAiService, AiService>();
+
+        services.Configure<AiSettings>(configuration.GetSection(AiSettings.SectionName));
+
+        services.AddScoped<IChatClient>(sp =>
+        {
+            var options = sp.GetRequiredService<IOptions<AiSettings>>().Value;
+            return new OllamaChatClient(new Uri(options.BaseUrl), options.ModelName);
+        });
+
+
 
         return services;
     }

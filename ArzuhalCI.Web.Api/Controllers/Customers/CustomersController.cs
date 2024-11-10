@@ -1,13 +1,13 @@
 using ArzuhalCI.Application.Customers.Add;
 using ArzuhalCI.Application.Customers.Get;
-using ArzuhalCI.Domain.Customers;
-using Asp.Versioning;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ArzuhalCI.Web.Api.Controllers.Customers;
 
 [Route("api/customers")]
+[Authorize]
 public class CustomersController : BaseController
 {
     private readonly IMediator _mediator;

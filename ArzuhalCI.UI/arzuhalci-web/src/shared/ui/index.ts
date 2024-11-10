@@ -8,3 +8,5 @@ export * from "./label";
 export * from "./input";
 export * from "./textarea";
 export * from "./table";
+export * from "./breadcrumb";
+export * from "./dropdown-menu";

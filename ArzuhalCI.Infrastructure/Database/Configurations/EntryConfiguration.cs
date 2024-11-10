@@ -16,6 +16,13 @@ public class EntryConfiguration : IEntityTypeConfiguration<Entry>
                 .HasColumnName("prompt")
         );
 
+        builder.ComplexProperty(
+            e => e.Output,
+            complexPropertyBuilder => complexPropertyBuilder.Property(x => x.Text)
+                .HasColumnName("output")
+                .IsRequired(false)
+            );
+
         builder
             .HasOne(p => p.Analyse)
             .WithOne(a => a.Entry)

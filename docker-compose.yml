@@ -12,11 +12,20 @@ services:
       - ./.containers/db:/var/lib/postgresql/data
     ports:
       - 5432:5432
+  timescaledb:
+    image: timescale/timescaledb-ha:pg16
+    container_name: timescaledb
+    environment:
+      - POSTGRES_PASSWORD=password    
+    ports:
+      - 5432:5432
+    volumes:
+      - ./.containers/timescale:/var/lib/postgresql/data
+  
+  
   ollama:
     image: ollama/ollama
-    container_name: ollama
-    command:
-      - ollama run llama3.2:1b
+    container_name: ollama    
     volumes:
       - ./.containers/ollama:/root/.ollama
     ports:

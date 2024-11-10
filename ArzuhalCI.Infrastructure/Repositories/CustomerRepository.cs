@@ -13,6 +13,11 @@ internal sealed class CustomerRepository : ICustomerRepository
         _context = context;
     }
 
+    public async Task<Customer?> GetByIdentityAsync(string identityId, CancellationToken cancellationToken)
+    {
+        return await _context.Customers.FirstOrDefaultAsync(x => x.IdentityId == identityId, cancellationToken);
+    }
+
 
     public async Task<Customer?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
