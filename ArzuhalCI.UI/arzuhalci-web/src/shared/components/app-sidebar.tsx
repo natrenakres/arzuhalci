@@ -1,7 +1,6 @@
 import { HomeIcon, List, PlusIcon, ScaleIcon } from "lucide-react";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "../ui";
 import Link from "next/link";
-import { UserButton } from "@clerk/nextjs";
 
 // Menu items.
 const items = [
@@ -53,8 +52,7 @@ export function AppSidebar() {
                 </SidebarGroup>
                 <SidebarGroup />
             </SidebarContent>
-            <SidebarFooter>
-                <UserButton />
+            <SidebarFooter>                
             </SidebarFooter>
         </Sidebar>
     )

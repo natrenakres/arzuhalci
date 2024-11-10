@@ -2,8 +2,6 @@ using ArzuhalCI.Application;
 using ArzuhalCI.Infrastructure;
 using ArzuhalCI.Web.Api;
 using ArzuhalCI.Web.Api.Extensions;
-using Asp.Versioning;
-using Asp.Versioning.Builder;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Serilog;

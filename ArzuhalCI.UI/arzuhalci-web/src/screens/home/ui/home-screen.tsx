@@ -1,14 +1,8 @@
 import { Button } from "@/src/shared/ui";
 import Link from "next/link";
-import { auth } from "@clerk/nextjs/server";
+
 export async function HomeScreen() {
-  const { userId } = await auth();
-
-  let href = 'new-user';
-
-  if (userId) {
-    href = 'entry'
-  }
+  const href = 'entry';
 
   return (
     <main className="w-screen h-screen dark:bg-black flex justify-center items-center dark:text-white">
@@ -18,7 +12,7 @@ export async function HomeScreen() {
         <div>
           <Link href={`/${href}`}>
             <Button className="text-xl">get started</Button>
-          </Link>          
+          </Link>           
         </div>
       </section>
     </main>

@@ -12,11 +12,13 @@ public class Entry : Entity
     {
         Prompt = new Prompt(prompt);
         CustomerId = customerId;
+        Status = EntryStatus.Draft;
     }
 
     public Guid CustomerId { get; private set; }
     public Customer Customer { get; private set; }
     public Prompt Prompt { get; private set; }
+    public Output Output { get; private set; }
     public EntryStatus Status { get; private set; }
     
     public Guid? AnalyseId { get; private set; }
@@ -30,5 +32,23 @@ public class Entry : Entity
         entry.Raise(new EntryAddedDomainEvent(entry.Id));
         
         return entry;
+    }
+
+    public void AddOutput(string output)
+    {
+        Output = new Output(output);
+    }
+
+    public Entry AddAnalyse(string mood, bool negative, int sentimentScore, string subject, string petition, string summary)
+    {
+        var analyse = Analyse.Create(mood, negative, sentimentScore, subject, petition, summary);
+        AnalyseId = analyse.Id;
+
+        return this;
+    }
+
+    public void SetAnalysed()
+    {
+        Status = EntryStatus.Analysed;
     }
 }
